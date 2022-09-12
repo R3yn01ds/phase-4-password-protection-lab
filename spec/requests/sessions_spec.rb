@@ -48,6 +48,20 @@ RSpec.describe "Sessions", type: :request do
       end
     end
 
+    context 'with invalid username' do
+      it 'returns a 401 unauthorized response' do
+        post "/login", params: { username: 'nobody', password: '123' }
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'does not set the user ID in the session' do
+        post "/login", params: { username: 'nobody', password: '123' }
+
+        expect(session[:user_id]).to eq(nil)
+      end
+    end
+
   end
   
   describe "DELETE /logout" do
